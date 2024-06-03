@@ -9,8 +9,9 @@ from sqlalchemy.orm import relationship, DeclarativeBase, Mapped, mapped_column
 from sqlalchemy import Integer, String, Text
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
-from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
+from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm, MessageForm
 import os
+import smtplib
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_KEY")
@@ -215,10 +216,26 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
-    return render_template("contact.html")
+    form = MessageForm()
+    msg_sent = False
+    if form.validate_on_submit():
+        email = "mypythonproject001@gmail.com"
+        password = "spks urom lxsy rwjv"
+        with smtplib.SMTP("smtp.gmail.com") as connection:
+            connection.starttls()
+            connection.login(user=email, password=password)
+            connection.sendmail(from_addr=email,
+                                to_addrs=email,
+                                msg=f"Subject:Form submitted from blog website.\n\n"
+                                    f"Name: {form.name.data}\n"
+                                    f"Email: {form.email.data}\n"
+                                    f"Phone number: {form.phone.data}\n\n"
+                                    f"{form.message.data}")
+        msg_sent = True
+    return render_template("contact.html", form=form, msg_sent=msg_sent)
 
 
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
