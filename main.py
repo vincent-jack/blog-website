@@ -222,7 +222,7 @@ def contact():
     msg_sent = False
     if form.validate_on_submit():
         email = "mypythonproject001@gmail.com"
-        password = "spks urom lxsy rwjv"
+        password = os.environ.get("GMAIL_PASSWORD")
         with smtplib.SMTP("smtp.gmail.com") as connection:
             connection.starttls()
             connection.login(user=email, password=password)
