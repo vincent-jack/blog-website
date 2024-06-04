@@ -8,4 +8,4 @@ An admin can create, edit and delete blog posts as seen here: <br>
 https://github.com/vincent-jack/blog-website/assets/162831739/fd670b11-a5e6-43ff-9f93-1f16135e220e
 
 
-
+The site now includes a functional contact form, which uses smtplib.
